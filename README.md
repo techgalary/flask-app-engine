@@ -1,9 +1,9 @@
-### Flask Image Upload App (Google Cloud Storage + Cloud Datastore)
+## Deploy a Flask App on Google Cloud Run with Image Upload & Metadata Storage
 #### This is a Flask web application that allows users to:
-#### ✅ Upload images 📤
-#### ✅ Store images in Google Cloud Storage 🗂️
-#### ✅ Save metadata in Google Cloud Datastore 📊
-#### ✅ View previously uploaded images 👀
+#### ✅ Upload images to Google Cloud Storage (GCS)
+#### ✅ Store metadata (filename, URL, timestamp) in Google Cloud Datastore 
+#### ✅ View previously uploaded images via Flask UI 
+#### ✅ Deploy the app serverlessly on Google Cloud Run
 
 
 ### 📂 Project Structure
@@ -16,12 +16,12 @@ flask-app-gcp/
 │── main.py              # Flask application
 │── Dockerfile           # Defines Cloud Run container
 │── requirements.txt     # Python dependencies
-│── .gcloudignore        # Ignore unnecessary files
+│── .gitignore        # Ignore unnecessary files
 │── README.md            # Documentation
 
 ```
 
-### 🚀 Setup on Google Cloud Shell
+## 🚀 Setup on Google Cloud Shell
 #### 1️⃣ Clone the Repository from GitHub
 ``` bash
 git clone https://github.com/<your-github-username>/flask-app-gcp.git
@@ -49,27 +49,35 @@ export BUCKET_NAME=${PROJECT_ID}-image-uploads
 gcloud storage buckets create gs://${BUCKET_NAME} --location=us-central1
 ```
 
-### 2️⃣ Grant Permissions
+#### 2️⃣ Grant Permissions
 ``` bash
 gcloud projects add-iam-policy-binding ${PROJECT_ID} \
     --member=allUsers \
     --role=roles/storage.objectViewer
 ```
 
-### 3️⃣ Run the Flask App Locally
+#### 3️⃣ Run the Flask App Locally
 ```
 python main.py
 Open http://127.0.0.1:8080/ in your browser.
 ```
-### Deploy to Google Cloud Run
+### Setting Up Google Cloud Datastore
+#### Google Cloud Datastore is used to store metadata for each uploaded image.
 
-#### 1️⃣ Enable Required Services
+#### 1️⃣ Enable Datastore API
 ``` bash
-gcloud services enable run.googleapis.com
+gcloud services enable datastore.googleapis.com
 ```
-#### 2️⃣ Build and Push Docker Image
+#### 2️⃣ Initialize Datastore
+``` bash
+gcloud datastore databases create --region=us-central1
 ```
-gcloud builds submit --tag gcr.io/$(gcloud config get-value project)/flask-app
+
+#### 3️⃣ Verify Metadata Storage
+#### After uploading images, you can check stored metadata using:
+``` bash
+gcloud datastore entities list --kind=Images
+
 ```
 
 ### Deploy to Google Cloud Run
