@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        .image-grid img {
+            border-radius: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container text-center">
+    <h2 class="mb-4">Upload an Image</h2>
+    
+    <form action="/upload" method="post" enctype="multipart/form-data" class="mb-4">
+        <input type="file" name="file" class="form-control mb-3">
+        <button type="submit" class="btn btn-primary w-100">Upload</button>
+    </form>
+
+    <h4 class="mb-3">Uploaded Images</h4>
+    
+    <div class="row image-grid">
+        {% for image in images %}
+            <div class="col-md-6 mb-3">
+                <img src="{{ image.url }}" alt="{{ image.filename }}" class="img-fluid">
+                <p class="small text-muted">{{ image.filename }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
